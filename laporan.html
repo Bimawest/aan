@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SITTA UT - Laporan Rekapitulasi</title>
     <style>
+        /* ----- kode custom Properties untuk efesiensi 
+        penggunaan var(--bla) ----- */
         :root {
             --ut-blue: #00569c;
             --ut-yellow: #ffcc00;
@@ -21,7 +23,7 @@
             min-height: 100vh;
         }
 
-        /* Watermark Logo UT */
+        /* Watermark background Logo UT */
         body::before {
             content: "";
             position: fixed;
@@ -45,6 +47,7 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
+        /* Tombol Kembali */
         .btn-back {
             text-decoration: none;
             color: white;
@@ -54,8 +57,10 @@
             border-radius: 5px;
             transition: 0.3s;
         }
+        /* efek tombol kembali berubah warna */
         .btn-back:hover { background: var(--ut-yellow); color: var(--ut-blue); }
 
+        /* ----- penampung konten utama ----- */
         .container {
             padding: 40px 50px;
             max-width: 1200px;
@@ -118,6 +123,7 @@
         tr:last-child td { border-bottom: none; }
         tr:hover { background-color: #f9fbff; }
 
+        /* tombol cetak */
         .btn-print {
             background: var(--success);
             color: white;
@@ -132,6 +138,7 @@
         }
         .btn-print:hover { background: #26b962; transform: translateY(-2px); }
 
+        /* kode barang */
         .badge-kode {
             background: #eef2f7;
             padding: 4px 8px;
@@ -144,19 +151,26 @@
 </head>
 <body>
 
+    <!-- bagian kepala pada halaman -->
     <header>
         <div style="font-weight: bold;">SITTA UT - Laporan Rekap</div>
         <a href="dashboard.html" class="btn-back"> Kembali ke Dashboard</a>
     </header>
 
-    <div class="container">
+    <div class="container"> <! -- penampung konten utama -- >
+        
+        <! -- tombol cetak laporan -- >
         <button class="btn-print" onclick="window.print()">🖨️ Cetak Laporan</button>
         
+        <! -- bagian header laporan -- >
         <div class="report-header">
             <h1>Laporan Rekapitulasi Stok Bahan Ajar</h1>
-            <p class="report-date" id="current-date"></p>
+            <p class="report-date" id="current-date"></p> <!-- fungsi 
+            update tanggal pada tag <script> -->
         </div>
 
+        
+        <! -- kartu statistik -- >
         <div class="stats-grid">
             <div class="stat-card">
                 <h3>Total Jenis Buku</h3>
@@ -175,6 +189,8 @@
             </div>
         </div>
 
+        
+        <! -- tabel laporan -- >
         <div class="table-container">
             <table>
                 <thead>
