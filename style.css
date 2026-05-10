@@ -1,3 +1,4 @@
+/* Global Styles warna & Variables */
 :root {
     --ut-blue: #00569c;
     --ut-yellow: #ffcc00;
@@ -20,7 +21,7 @@ nav {
     align-items: center;
     color: white;
 }
-
+/* sub navigasi pada navbar */
 nav a {
     color: white;
     text-decoration: none;
@@ -28,6 +29,7 @@ nav a {
     font-weight: bold;
 }
 
+/* penampung konten utama */
 .container {
     padding: 2rem;
     max-width: 1000px;
