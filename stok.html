@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SITTA UT - Daftar Stok Bahan Ajar</title>
     <style>
+        /* ----- Variabel Warna ----- */
         :root {
             --ut-blue: #00569c;
             --ut-yellow: #ffcc00;
@@ -33,6 +34,7 @@
             z-index: -1;
         }
 
+        /* style bagian kepala atau header */
         header {
             background-color: var(--ut-blue);
             color: white;
@@ -43,6 +45,7 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
+        /* tombol kembali ke dashboard */
         .btn-back {
             text-decoration: none;
             color: white;
@@ -52,8 +55,11 @@
             font-weight: bold;
             transition: 0.3s;
         }
+        /* efek perubahan warna tombol kembali ke dashboard */
         .btn-back:hover { background: var(--ut-yellow); color: var(--ut-blue); }
 
+        
+        /* ----- penampung konten utama ----- */
         .container {
             padding: 40px 50px;
             max-width: 1200px;
@@ -126,7 +132,7 @@
         <a href="dashboard.html" class="btn-back">← Dashboard</a>
     </header>
 
-    <div class="container">
+    <div class="container"> <! -- penampung konten utama stok -- >
         <h2 class="section-title">Daftar Inventaris Buku</h2>
 
         <div class="card-table">
@@ -144,6 +150,7 @@
             </table>
         </div>
 
+        <! -- tombol simulasi tambah baris -- >
         <button class="btn-add" onclick="tambahSimulasi()">
             <span>+</span> Tambah Baris Simulasi (DOM Manipulation)
         </button>
