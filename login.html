@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SITTA UT - Login Modern</title>
     <style>
+        /* ----- kode custom Properties untuk efesiensi 
+        penggunaan var(--bla) ----- */
         :root {
             --ut-blue: #00569c;
             --danger: #ff4757;
@@ -12,6 +15,7 @@
             --white: #ffffff;
         }
 
+        /* ----- Styling Dasar pada seluruh halaman login----- */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
@@ -28,7 +32,7 @@
             background: var(--white);
             padding: 40px;
             border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
             width: 100%;
             max-width: 380px;
             text-align: center;
@@ -37,14 +41,41 @@
             z-index: 10;
         }
 
-        .login-card:hover { transform: translateY(-5px); }
-        .logo-ut { width: 160px; margin-bottom: 25px; }
-        h2 { color: var(--ut-blue); margin: 0 0 5px 0; font-weight: 800; }
-        .subtitle { color: #666; font-size: 0.85em; margin-bottom: 30px; }
+        /* ----- Efek bergerak saat kursor berada pada Card login ----- */
+        .login-card:hover {
+            transform: translateY(-5px);
+        }
 
-        /* ----- Input Style ----- */
-        .input-group { text-align: left; margin-bottom: 20px; }
-        .input-group label { display: block; margin-bottom: 8px; font-weight: bold; color: #333; }
+        .logo-ut {
+            width: 160px;
+            margin-bottom: 25px;
+        }
+
+        h2 {
+            color: var(--ut-blue);
+            margin: 0 0 5px 0;
+            font-weight: 800;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 0.85em;
+            margin-bottom: 30px;
+        }
+
+        /* ----- Input Style pada login ----- */
+        .input-group {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+
         .input-group input {
             width: 100%;
             padding: 14px 18px;
@@ -54,10 +85,11 @@
             font-size: 1em;
             transition: border-color 0.3s, box-shadow 0.3s;
         }
+
         .input-group input:focus {
             border-color: var(--ut-blue);
             outline: none;
-            box-shadow: 0 0 8px rgba(0,86,156,0.1);
+            box-shadow: 0 0 8px rgba(0, 86, 156, 0.1);
         }
 
         /* ----- Tombol Masuk ----- */
@@ -73,26 +105,52 @@
             font-size: 1.1em;
             transition: background 0.3s, transform 0.1s;
         }
-        .btn-login:hover { background: #004481; }
-        .btn-login:active { transform: scale(0.98); }
 
-        .extra-links { margin-top: 25px; font-size: 0.9em; color: #777; }
-        .link-ut { color: var(--ut-blue); cursor: pointer; font-weight: bold; text-decoration: none; }
-        .link-ut:hover { text-decoration: underline; }
+        /* ----- efek perubahan warna pada tombol masuk saat kursor berada pada tombol ----- */
+        .btn-login:hover {
+            background: #004481;
+        }
 
-        /* ----- Modal Dinamis (Sesuai Tugas) ----- */
+        .btn-login:active {
+            transform: scale(0.98);
+        }
+
+        .extra-links {
+            margin-top: 25px;
+            font-size: 0.9em;
+            color: #777;
+        }
+
+        .link-ut {
+            color: var(--ut-blue);
+            cursor: pointer;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .link-ut:hover {
+            text-decoration: underline;
+        }
+
+        /* ----- card box setelah memasukkan email dan password benar ----- */
         .modal {
             display: none;
             position: fixed;
             z-index: 1000;
-            left: 0; top: 0; width: 100%; height: 100%;
-            background-color: rgba(0,0,0,0.5);
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(8px);
             align-items: center;
             justify-content: center;
         }
 
-        .modal.show { display: flex; }
+        /* ----- efek memunculkan card box ----- */
+        .modal.show {
+            display: flex;
+        }
 
         .modal-content {
             background-color: var(--white);
@@ -101,23 +159,29 @@
             width: 90%;
             max-width: 350px;
             text-align: center;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
             transform: scale(0.8);
             transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        .modal.show .modal-content { transform: scale(1); }
+        .modal.show .modal-content {
+            transform: scale(1);
+        }
 
         .icon-frame {
-            width: 70px; height: 70px;
+            width: 70px;
+            height: 70px;
             border: 4px solid var(--ut-blue);
             border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             margin: 0 auto 20px auto;
             font-size: 2.5em;
             font-weight: bold;
         }
 
+        /* ----- tombol untuk melanjutkan ke dashboard ----- */
         .btn-modal {
             margin-top: 20px;
             padding: 12px 25px;
@@ -129,8 +193,14 @@
             cursor: pointer;
         }
 
-        /* ----- Toast Notifikasi ----- */
-        #toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; }
+        /* ----- Toast Notifikasi salah input email atau password ----- */
+        #toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+
         .toast {
             background: var(--danger);
             color: white;
@@ -142,19 +212,27 @@
             transform: translateX(150%);
             transition: transform 0.4s;
         }
-        .toast.show { transform: translateX(0); }
+
+        .toast.show {
+            transform: translateX(0);
+        }
     </style>
 </head>
+
 <body>
 
+    <!-- toas atau modul allert awalnya tersembunyi dan akan muncul 
+     saat memasukkan email atau password yang salag, fungsi ini 
+     berada dibaris 192-197-->
     <div id="toast-container">
-      <!-- toas atau modul allert awalnya tersembunyi dan akan muncul saat memasukkan email atau password yang salag, fungsi ini berada dibaris 192-197-->
         <div id="login-toast" class="toast">
             <span>⚠️</span>
             <span id="toast-message">email/password salah</span>
         </div>
     </div>
 
+    <!-- element Card box login berhasil setelah memasukkan email dan password benar 
+     fungsi berada di baris 280-319 -->
     <div id="customModal" class="modal">
         <div class="modal-content">
             <div id="modalIcon" class="icon-frame">?</div>
@@ -168,7 +246,7 @@
         <img src="assets/logo-ut-small-transparent-300x226.png" alt="Logo UT" class="logo-ut">
         <h2>Login SITTA</h2>
         <p class="subtitle">Sistem Informasi Tiras dan Transaksi Bahan Ajar</p>
-        
+
         <div class="input-group">
             <label>Email</label>
             <input type="email" id="email" placeholder="Contoh: admin@ut.ac.id">
@@ -182,13 +260,14 @@
         <button class="btn-login" onclick="prosesLogin()">Masuk</button>
 
         <div class="extra-links">
-            <span class="link-ut" onclick="bukaModal('lupa')">Lupa Sandi?</span> | 
+            <span class="link-ut" onclick="bukaModal('lupa')">Lupa Sandi?</span> |
             <span class="link-ut" onclick="bukaModal('daftar')">Daftar Akun</span>
         </div>
     </div>
 
     <script src="js/data.js"></script>
     <script>
+        // fungsi untuk menampilkan alert salah password
         function showToast(pesan) {
             const toast = document.getElementById('login-toast');
             document.getElementById('toast-message').innerText = pesan;
@@ -196,10 +275,12 @@
             setTimeout(() => { toast.classList.remove('show'); }, 3000);
         }
 
+        // fungsi memunculkan  card modal sesuai dengan tipe yang dipilih (sukses, lupa, daftar)
         function tutupModal() {
             document.getElementById('customModal').classList.remove('show');
         }
 
+        // fungsi menampilkan card modal dan logika lupa sandi dan daftar
         function bukaModal(tipe, userNama = "") {
             const modal = document.getElementById('customModal');
             const icon = document.getElementById('modalIcon');
@@ -212,7 +293,7 @@
             if (tipe === 'sukses') {
                 const jam = new Date().getHours();
                 let salam = jam >= 5 && jam < 11 ? "Pagi" : jam >= 11 && jam < 15 ? "Siang" : jam >= 15 && jam < 18 ? "Sore" : "Malam";
-                
+
                 icon.innerHTML = "✓";
                 icon.style.color = "var(--success)";
                 icon.style.borderColor = "var(--success)";
@@ -241,6 +322,7 @@
             }
         }
 
+        // logika login 
         function prosesLogin() {
             const emailIn = document.getElementById('email').value.trim();
             const passIn = document.getElementById('password').value;
@@ -250,7 +332,7 @@
                 return;
             }
 
-            // dataPengguna berasal dari data.js
+            // dataPengguna berasal dari file data.js
             if (typeof dataPengguna !== 'undefined') {
                 const user = dataPengguna.find(u => u.email === emailIn && u.password === passIn);
                 if (user) {
@@ -264,10 +346,11 @@
         }
 
         // Klik di luar modal untuk menutup
-        window.onclick = function(event) {
+        window.onclick = function (event) {
             const modal = document.getElementById('customModal');
             if (event.target == modal) { tutupModal(); }
         }
     </script>
 </body>
+
 </html>
