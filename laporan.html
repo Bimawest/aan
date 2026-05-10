@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SITTA UT - Laporan Rekapitulasi</title>
+    <style>
+        :root {
+            --ut-blue: #00569c;
+            --ut-yellow: #ffcc00;
+            --success: #2ed573;
+            --bg-gray: #f4f7f6;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            background-color: var(--bg-gray);
+            color: #333;
+            min-height: 100vh;
+        }
+
+        /* Watermark Logo UT */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 50%; left: 50%;
+            width: 500px; height: 500px;
+            background: url('assets/logo-ut-small-transparent-300x226.png') no-repeat center;
+            background-size: contain;
+            transform: translate(-50%, -50%);
+            opacity: 0.04;
+            z-index: -1;
+        }
+
+        /* Header */
+        header {
+            background-color: var(--ut-blue);
+            color: white;
+            padding: 15px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .btn-back {
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            background: rgba(255,255,255,0.1);
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+        .btn-back:hover { background: var(--ut-yellow); color: var(--ut-blue); }
+
+        .container {
+            padding: 40px 50px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Judul Laporan */
+        .report-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .report-header h1 {
+            margin: 0;
+            color: var(--ut-blue);
+            font-size: 2em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .report-date { color: #777; margin-top: 5px; }
+
+        /* Kartu Statistik */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border-top: 5px solid var(--ut-blue);
+        }
+
+        .stat-card h3 { margin: 0; color: #666; font-size: 0.9em; text-transform: uppercase; }
+        .stat-card .value { font-size: 2.2em; font-weight: 800; color: var(--ut-blue); margin: 10px 0; }
+        .stat-card .status { color: var(--success); font-weight: bold; font-size: 0.9em; }
+
+        /* Tabel Modern */
+        .table-container {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead { background-color: var(--ut-blue); color: white; }
+        th { padding: 18px; text-align: left; font-size: 0.9em; }
+        td { padding: 15px 18px; border-bottom: 1px solid #eee; }
+        tr:last-child td { border-bottom: none; }
+        tr:hover { background-color: #f9fbff; }
+
+        .btn-print {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            float: right;
+            margin-bottom: 20px;
+            transition: 0.3s;
+        }
+        .btn-print:hover { background: #26b962; transform: translateY(-2px); }
+
+        .badge-kode {
+            background: #eef2f7;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-weight: bold;
+            color: var(--ut-blue);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div style="font-weight: bold;">SITTA UT - Laporan Rekap</div>
+        <a href="dashboard.html" class="btn-back"> Kembali ke Dashboard</a>
+    </header>
+
+    <div class="container">
+        <button class="btn-print" onclick="window.print()">🖨️ Cetak Laporan</button>
+        
+        <div class="report-header">
+            <h1>Laporan Rekapitulasi Stok Bahan Ajar</h1>
+            <p class="report-date" id="current-date"></p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Total Jenis Buku</h3>
+                <div class="value">5</div>
+                <div class="status">● Terdata Aktif</div>
+            </div>
+            <div class="stat-card">
+                <h3>Total Stok Keseluruhan</h3>
+                <div class="value">1.587</div>
+                <div class="status">● Inventory Aman</div>
+            </div>
+            <div class="stat-card">
+                <h3>Status Sistem</h3>
+                <div class="value" style="color: var(--success);">AKTiF</div>
+                <div class="status">● Berjalan Normal</div>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Kode Barang</th>
+                        <th>Nama Bahan Ajar</th>
+                        <th>Edisi</th>
+                        <th>Stok Tersedia</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td><span class="badge-kode">ASIP4301</span></td>
+                        <td>Pengantar Ilmu Komunikasi</td>
+                        <td>2</td>
+                        <td style="font-weight: bold;">548</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td><span class="badge-kode">EKMA4216</span></td>
+                        <td>Manajemen Keuangan</td>
+                        <td>3</td>
+                        <td style="font-weight: bold;">392</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td><span class="badge-kode">EKMA4310</span></td>
+                        <td>Kepemimpinan</td>
+                        <td>1</td>
+                        <td style="font-weight: bold;">278</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td><span class="badge-kode">BIOL4211</span></td>
+                        <td>Mikrobiologi Dasar</td>
+                        <td>2</td>
+                        <td style="font-weight: bold;">165</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td><span class="badge-kode">PAUD4401</span></td>
+                        <td>Perkembangan Anak Usia Dini</td>
+                        <td>4</td>
+                        <td style="font-weight: bold;">204</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Mengisi tanggal otomatis sesuai hari ini
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('current-date').innerText = "Data per tanggal: " + new Date().toLocaleDateString('id-ID', options);
+    </script>
+</body>
+</html>

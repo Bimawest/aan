@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SITTA UT - Daftar Stok Bahan Ajar</title>
+    <style>
+        :root {
+            --ut-blue: #00569c;
+            --ut-yellow: #ffcc00;
+            --bg-gray: #f8f9fa;
+            --white: #ffffff;
+            --text-dark: #2d3436;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            background-color: var(--bg-gray);
+            color: var(--text-dark);
+        }
+
+        /* Watermark Background */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 50%; left: 50%;
+            width: 500px; height: 500px;
+            background: url('assets/logo-ut-small-transparent-300x226.png') no-repeat center;
+            background-size: contain;
+            transform: translate(-50%, -50%);
+            opacity: 0.03;
+            z-index: -1;
+        }
+
+        header {
+            background-color: var(--ut-blue);
+            color: white;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .btn-back {
+            text-decoration: none;
+            color: white;
+            background: rgba(255,255,255,0.15);
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .btn-back:hover { background: var(--ut-yellow); color: var(--ut-blue); }
+
+        .container {
+            padding: 40px 50px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            margin-bottom: 30px;
+            border-bottom: 3px solid var(--ut-blue);
+            display: inline-block;
+            padding-bottom: 10px;
+        }
+
+        .card-table {
+            background: var(--white);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        thead {
+            background-color: var(--ut-blue);
+            color: white;
+        }
+
+        th { padding: 20px; text-transform: uppercase; font-size: 0.85em; letter-spacing: 1px; }
+        td { padding: 20px; border-bottom: 1px solid #eee; vertical-align: middle; }
+        tr:hover { background-color: #fcfdfe; }
+
+        .cover-img {
+            width: 60px; height: 85px;
+            object-fit: cover;
+            border-radius: 6px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .badge { padding: 6px 12px; border-radius: 20px; font-size: 0.85em; font-weight: bold; }
+        .stok-aman { background: #e3fcef; color: #00b894; }
+        .stok-limit { background: #fff9db; color: #fab005; }
+
+        .kode-text { font-family: 'Courier New', monospace; font-weight: bold; color: var(--ut-blue); }
+
+        .btn-add {
+            margin-top: 25px;
+            background: var(--ut-blue);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: 0.3s;
+        }
+        .btn-add:hover { background: #004481; transform: translateY(-2px); }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div style="font-weight: 800; font-size: 1.4em;">📦 SITTA - STOK BAHAN AJAR</div>
+        <a href="dashboard.html" class="btn-back">← Dashboard</a>
+    </header>
+
+    <div class="container">
+        <h2 class="section-title">Daftar Inventaris Buku</h2>
+
+        <div class="card-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Cover</th>
+                        <th>Kode & Nama Bahan Ajar</th>
+                        <th>Edisi</th>
+                        <th>Jumlah Stok</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="stok-body"></tbody>
+            </table>
+        </div>
+
+        <button class="btn-add" onclick="tambahSimulasi()">
+            <span>+</span> Tambah Baris Simulasi (DOM Manipulation)
+        </button>
+    </div>
+
+    <script src="js/data.js"></script>
+
+    <script>
+        // 2. Fungsi untuk memuat data dari data.js secara otomatis
+        function muatDataOtomatis() {
+            const tableBody = document.getElementById('stok-body');
+            tableBody.innerHTML = ""; // Bersihkan tabel jika ada isinya
+
+            // dataBahanAjar adalah variabel dari file js/data.js
+            dataBahanAjar.forEach(buku => {
+                const statusClass = buku.stok > 200 ? 'stok-aman' : 'stok-limit';
+                const statusText = buku.stok > 200 ? 'Tersedia' : 'Menipis';
+
+                const baris = `
+                    <tr>
+                        <td><img src="${buku.cover}" class="cover-img" alt="Buku" onerror="this.src='https://via.placeholder.com/60x85?text=No+Img'"></td>
+                        <td>
+                            <div class="kode-text">${buku.kodeBarang}</div>
+                            <div style="font-weight: 600;">${buku.namaBarang}</div>
+                        </td>
+                        <td>Ke-${buku.edisi}</td>
+                        <td style="font-weight: bold;">${buku.stok}</td>
+                        <td><span class="badge ${statusClass}">${statusText}</span></td>
+                    </tr>
+                `;
+                tableBody.innerHTML += baris;
+            });
+        }
+
+        // Jalankan fungsi muat data saat halaman dibuka
+        window.onload = muatDataOtomatis;
+
+        // 3. Fungsi Tambah Baris (Tetap ada sebagai syarat manipulasi DOM)
+        function tambahSimulasi() {
+            const tableBody = document.getElementById('stok-body');
+            const newRow = `
+                <tr style="background-color: #f0faff;">
+                    <td><div style="width:60px; height:85px; background:#ddd; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:0.5em; color:#666;">DOM NEW</div></td>
+                    <td>
+                        <div class="kode-text">BARU-001</div>
+                        <div style="font-weight: 600;">Buku Simulasi Baru (Hasil Klik)</div>
+                    </td>
+                    <td>Ke-1</td>
+                    <td style="font-weight: bold;">100</td>
+                    <td><span class="badge stok-limit">Limit</span></td>
+                </tr>
+            `;
+            tableBody.innerHTML += newRow;
+        }
+    </script>
+</body>
+</html>

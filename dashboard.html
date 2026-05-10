@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SITTA UT - Dashboard Modern</title>
+    <style>
+        :root {
+            --ut-blue: #00569c;
+            --ut-yellow: #ffcc00;
+            --bg-gray: #f0f2f5;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            background-color: var(--bg-gray);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* ----- WATERMARK LOGO UT (KEREN) ----- */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 600px; /* Ukuran logo besar */
+            height: 600px;
+            /* Menggunakan file logo transparan kamu */
+            background: url('assets/logo-ut-small-transparent-300x226.png') no-repeat center;
+            background-size: contain;
+            transform: translate(-50%, -50%);
+            opacity: 0.05; /* Dibuat sangat samar agar elegan */
+            z-index: -1; /* Di belakang semua konten */
+            pointer-events: none;
+        }
+
+        /* Navbar */
+        nav {
+            background-color: var(--ut-blue);
+            color: white;
+            padding: 15px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        nav .logo { font-weight: 800; font-size: 1.2em; letter-spacing: 1px; }
+        nav .menu a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+        nav .menu a:hover { color: var(--ut-yellow); }
+
+        .container {
+            padding: 40px 50px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Welcome Card */
+        .welcome-card {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 20px;
+            border-left: 8px solid var(--ut-blue);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            margin-bottom: 40px;
+            backdrop-filter: blur(5px);
+        }
+
+        #greeting {
+            margin: 0;
+            color: var(--ut-blue);
+            font-size: 2.5em;
+            font-weight: 800;
+        }
+
+        .subtitle {
+            color: #555;
+            margin-top: 10px;
+            font-size: 1.2em;
+        }
+
+        /* Grid Menu Modern */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .menu-item {
+            background: white;
+            padding: 35px;
+            border-radius: 15px;
+            text-decoration: none;
+            color: #333;
+            font-weight: 700;
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .menu-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0,86,156,0.15);
+            border-color: var(--ut-blue);
+            color: var(--ut-blue);
+        }
+
+        .menu-item i {
+            font-size: 1.5em;
+            background: #f0f7ff;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">SITTA UNIVERSITAS TERBUKA</div>
+        <div class="menu">
+            <a href="dashboard.html">Home</a>
+            <a href="stok.html">Stok</a>
+            <a href="tracking.html">Tracking</a>
+            <a href="login.html" style="background: rgba(255,255,255,0.1); padding: 8px 15px; border-radius: 5px;">Logout</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="welcome-card">
+            <h1 id="greeting">Memuat...</h1>
+            <p class="subtitle">Sistem Informasi Tiras dan Transaksi Bahan Ajar<br>
+            Login sebagai: <strong>Admin SITTA</strong></p>
+        </div>
+
+        <div class="menu-grid">
+            <a href="stok.html" class="menu-item">
+                <i>📦</i> Informasi Bahan Ajar
+            </a>
+            <a href="tracking.html" class="menu-item">
+                <i>🚚</i> Tracking Pengiriman
+            </a>
+            <a href="laporan.html" class="menu-item">
+                <i>📊</i> Laporan Rekapitulasi
+            </a>
+        </div>
+    </div>
+
+    <script>
+        function updateGreeting() {
+            const jam = new Date().getHours();
+            let salam = "";
+            let icon = "";
+
+            if (jam >= 5 && jam < 11) { salam = "Selamat Pagi"; icon = "☀️"; }
+            else if (jam >= 11 && jam < 15) { salam = "Selamat Siang"; icon = "🌤️"; }
+            else if (jam >= 15 && jam < 18) { salam = "Selamat Sore"; icon = "⛅"; }
+            else { salam = "Selamat Malam"; icon = "🌙"; }
+
+            document.getElementById('greeting').innerHTML = `${salam}, Admin SITTA! ${icon}`;
+        }
+
+        updateGreeting();
+    </script>
+</body>
+</html>

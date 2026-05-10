@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SITTA UT - Login Modern</title>
+    <style>
+        :root {
+            --ut-blue: #00569c;
+            --danger: #ff4757;
+            --success: #2ed573;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, var(--ut-blue) 0%, #007bff 100%);
+            overflow: hidden;
+        }
+
+        /* ----- Login Card Utama ----- */
+        .login-card {
+            background: var(--white);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 380px;
+            text-align: center;
+            transition: transform 0.3s ease;
+            position: relative;
+            z-index: 10;
+        }
+
+        .login-card:hover { transform: translateY(-5px); }
+        .logo-ut { width: 160px; margin-bottom: 25px; }
+        h2 { color: var(--ut-blue); margin: 0 0 5px 0; font-weight: 800; }
+        .subtitle { color: #666; font-size: 0.85em; margin-bottom: 30px; }
+
+        /* ----- Input Style ----- */
+        .input-group { text-align: left; margin-bottom: 20px; }
+        .input-group label { display: block; margin-bottom: 8px; font-weight: bold; color: #333; }
+        .input-group input {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid #eee;
+            border-radius: 10px;
+            box-sizing: border-box;
+            font-size: 1em;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .input-group input:focus {
+            border-color: var(--ut-blue);
+            outline: none;
+            box-shadow: 0 0 8px rgba(0,86,156,0.1);
+        }
+
+        /* ----- Tombol Masuk ----- */
+        .btn-login {
+            width: 100%;
+            padding: 16px;
+            background: var(--ut-blue);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: background 0.3s, transform 0.1s;
+        }
+        .btn-login:hover { background: #004481; }
+        .btn-login:active { transform: scale(0.98); }
+
+        .extra-links { margin-top: 25px; font-size: 0.9em; color: #777; }
+        .link-ut { color: var(--ut-blue); cursor: pointer; font-weight: bold; text-decoration: none; }
+        .link-ut:hover { text-decoration: underline; }
+
+        /* ----- Modal Dinamis (Sesuai Tugas) ----- */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0; top: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            backdrop-filter: blur(8px);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show { display: flex; }
+
+        .modal-content {
+            background-color: var(--white);
+            padding: 40px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 350px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            transform: scale(0.8);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .modal.show .modal-content { transform: scale(1); }
+
+        .icon-frame {
+            width: 70px; height: 70px;
+            border: 4px solid var(--ut-blue);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 20px auto;
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+
+        .btn-modal {
+            margin-top: 20px;
+            padding: 12px 25px;
+            background-color: var(--ut-blue);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* ----- Toast Notifikasi ----- */
+        #toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; }
+        .toast {
+            background: var(--danger);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transform: translateX(150%);
+            transition: transform 0.4s;
+        }
+        .toast.show { transform: translateX(0); }
+    </style>
+</head>
+<body>
+
+    <div id="toast-container">
+      <!-- toas atau modul allert awalnya tersembunyi dan akan muncul saat memasukkan email atau password yang salag, fungsi ini berada dibaris 192-197-->
+        <div id="login-toast" class="toast">
+            <span>⚠️</span>
+            <span id="toast-message">email/password salah</span>
+        </div>
+    </div>
+
+    <div id="customModal" class="modal">
+        <div class="modal-content">
+            <div id="modalIcon" class="icon-frame">?</div>
+            <h3 id="modalTitle">Judul</h3>
+            <p id="modalBody">Pesan...</p>
+            <button id="modalBtn" class="btn-modal">Lanjutkan</button>
+        </div>
+    </div>
+
+    <div class="login-card">
+        <img src="assets/logo-ut-small-transparent-300x226.png" alt="Logo UT" class="logo-ut">
+        <h2>Login SITTA</h2>
+        <p class="subtitle">Sistem Informasi Tiras dan Transaksi Bahan Ajar</p>
+        
+        <div class="input-group">
+            <label>Email</label>
+            <input type="email" id="email" placeholder="Contoh: admin@ut.ac.id">
+        </div>
+
+        <div class="input-group">
+            <label>Password</label>
+            <input type="password" id="password" placeholder="Masukkan password">
+        </div>
+
+        <button class="btn-login" onclick="prosesLogin()">Masuk</button>
+
+        <div class="extra-links">
+            <span class="link-ut" onclick="bukaModal('lupa')">Lupa Sandi?</span> | 
+            <span class="link-ut" onclick="bukaModal('daftar')">Daftar Akun</span>
+        </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script>
+        function showToast(pesan) {
+            const toast = document.getElementById('login-toast');
+            document.getElementById('toast-message').innerText = pesan;
+            toast.classList.add('show');
+            setTimeout(() => { toast.classList.remove('show'); }, 3000);
+        }
+
+        function tutupModal() {
+            document.getElementById('customModal').classList.remove('show');
+        }
+
+        function bukaModal(tipe, userNama = "") {
+            const modal = document.getElementById('customModal');
+            const icon = document.getElementById('modalIcon');
+            const title = document.getElementById('modalTitle');
+            const body = document.getElementById('modalBody');
+            const btn = document.getElementById('modalBtn');
+
+            modal.classList.add('show');
+
+            if (tipe === 'sukses') {
+                const jam = new Date().getHours();
+                let salam = jam >= 5 && jam < 11 ? "Pagi" : jam >= 11 && jam < 15 ? "Siang" : jam >= 15 && jam < 18 ? "Sore" : "Malam";
+                
+                icon.innerHTML = "✓";
+                icon.style.color = "var(--success)";
+                icon.style.borderColor = "var(--success)";
+                title.innerText = "Login Berhasil!";
+                body.innerHTML = `<strong>Selamat ${salam}, ${userNama}!</strong><br>Menyiapkan dashboard Anda...`;
+                btn.innerText = "Buka Dashboard";
+                btn.onclick = () => window.location.href = "dashboard.html";
+
+            } else if (tipe === 'lupa') {
+                icon.innerHTML = "?";
+                icon.style.color = "var(--ut-blue)";
+                icon.style.borderColor = "var(--ut-blue)";
+                title.innerText = "Lupa Sandi";
+                body.innerText = "Silakan hubungi IT Pusat UT untuk pemulihan akses akun Anda.";
+                btn.innerText = "Tutup";
+                btn.onclick = tutupModal;
+
+            } else if (tipe === 'daftar') {
+                icon.innerHTML = "+";
+                icon.style.color = "var(--ut-blue)";
+                icon.style.borderColor = "var(--ut-blue)";
+                title.innerText = "Daftar Akun";
+                body.innerText = "Pendaftaran akun baru SITTA dilakukan melalui admin di UT-Daerah masing-masing.";
+                btn.innerText = "Mengerti";
+                btn.onclick = tutupModal;
+            }
+        }
+
+        function prosesLogin() {
+            const emailIn = document.getElementById('email').value.trim();
+            const passIn = document.getElementById('password').value;
+
+            if (!emailIn || !passIn) {
+                showToast("Email dan Password tidak boleh kosong!");
+                return;
+            }
+
+            // dataPengguna berasal dari data.js
+            if (typeof dataPengguna !== 'undefined') {
+                const user = dataPengguna.find(u => u.email === emailIn && u.password === passIn);
+                if (user) {
+                    bukaModal('sukses', user.nama);
+                } else {
+                    showToast("email/password yang anda masukkan salah");
+                }
+            } else {
+                console.error("File data.js tidak ditemukan atau gagal dimuat.");
+            }
+        }
+
+        // Klik di luar modal untuk menutup
+        window.onclick = function(event) {
+            const modal = document.getElementById('customModal');
+            if (event.target == modal) { tutupModal(); }
+        }
+    </script>
+</body>
+</html>

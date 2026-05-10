@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SITTA UT - Tracking Pengiriman</title>
+    <style>
+        :root { 
+            --ut-blue: #00569c; 
+            --success: #2ed573; 
+            --bg: #f4f7f6; 
+        }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; }
+        
+        /* Watermark Background */
+        body::before {
+            content: ""; position: fixed; top: 50%; left: 50%; width: 500px; height: 500px;
+            background: url('assets/logo-ut-small-transparent-300x226.png') no-repeat center;
+            background-size: contain; transform: translate(-50%, -50%); opacity: 0.05; z-index: -1;
+        }
+
+        header { background: var(--ut-blue); color: white; padding: 15px 50px; display: flex; justify-content: space-between; align-items: center; }
+        .btn-dash { color: white; text-decoration: none; background: rgba(255,255,255,0.2); padding: 8px 15px; border-radius: 8px; font-weight: bold; }
+
+        .container { padding: 40px; max-width: 800px; margin: auto; }
+        .card { background: white; padding: 35px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
+        
+        .search-box { display: flex; gap: 10px; margin-bottom: 30px; }
+        input { flex: 1; padding: 15px; border: 2px solid #eee; border-radius: 12px; font-size: 1em; outline: none; transition: 0.3s; }
+        input:focus { border-color: var(--ut-blue); }
+        .btn-track { background: var(--ut-blue); color: white; border: none; padding: 0 30px; border-radius: 12px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .btn-track:hover { background: #004481; }
+
+        /* Styling Hasil */
+        .info-header { background: #f8faff; padding: 25px; border-radius: 12px; border-left: 5px solid var(--ut-blue); margin-bottom: 25px; display: none; }
+        .timeline { border-left: 3px solid #eee; padding-left: 30px; margin-left: 15px; display: none; margin-top: 30px; }
+        .step { position: relative; margin-bottom: 25px; text-align: left; }
+        .step::before { content: ""; position: absolute; left: -39.5px; top: 5px; width: 16px; height: 16px; background: var(--ut-blue); border-radius: 50%; border: 4px solid white; box-shadow: 0 0 0 3px #eee; }
+        .waktu { font-size: 0.8em; color: #888; font-weight: bold; }
+        .not-found { color: red; background: #fff5f5; padding: 15px; border-radius: 10px; display: none; text-align: center; font-weight: bold; }
+        
+        /* Grid Layout untuk Detail */
+        .grid-detail { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; text-align: left; line-height: 1.6; }
+        .label-detail { color: var(--ut-blue); font-weight: bold; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div style="font-weight: 800;">SITTA UT - TRACKING SYSTEM</div>
+    <a href="dashboard.html" class="btn-dash">← Dashboard</a>
+</header>
+
+<div class="container">
+    <div class="card">
+        <h2>Lacak Pengiriman</h2>
+        <p style="color: #666;">Masukkan Nomor DO (Contoh: 2023001234)</p>
+        
+        <div class="search-box">
+            <input type="text" id="doInput" placeholder="Ketik nomor DO...">
+            <button class="btn-track" onclick="lacakSekarang()">Lacak</button>
+        </div>
+
+        <div id="infoBox" class="info-header"></div>
+        
+        <div id="timeline" class="timeline"></div>
+        
+        <div id="pesanError" class="not-found">⚠️ Nomor DO tidak ditemukan!</div>
+    </div>
+</div>
+
+<script src="js/data.js"></script> 
+
+<script>
+    function lacakSekarang() {
+        const input = document.getElementById('doInput').value.trim();
+        const infoBox = document.getElementById('infoBox');
+        const timeline = document.getElementById('timeline');
+        const error = document.getElementById('pesanError');
+
+        // Reset tampilan setiap kali tombol ditekan
+        infoBox.style.display = 'none';
+        timeline.style.display = 'none';
+        error.style.display = 'none';
+
+        // Pastikan variabel dataTracking tersedia dari data.js
+        if (typeof dataTracking === 'undefined') {
+            alert("Error: File data.js tidak terbaca!");
+            return;
+        }
+
+        const data = dataTracking[input];
+
+        if (data) {
+            // 1. Tampilkan Header Info lengkap sesuai instruksi tugas
+            infoBox.style.display = 'block';
+            infoBox.innerHTML = `
+                <div class="grid-detail">
+                    <div>
+                        <span class="label-detail">Nama Mahasiswa:</span><br>${data.nama}<br><br>
+                        <span class="label-detail">Tanggal Kirim:</span><br>${data.tanggalKirim}<br><br>
+                        <span class="label-detail">Ekspedisi:</span><br>${data.ekspedisi}
+                    </div>
+                    <div>
+                        <span class="label-detail">Status:</span><br><span style="color:var(--success); font-weight:bold;">${data.status}</span><br><br>
+                        <span class="label-detail">Jenis Paket:</span><br>${data.paket}<br><br>
+                        <span class="label-detail">Total Pembayaran:</span><br><span style="font-weight:bold; color:#333;">${data.total}</span>
+                    </div>
+                </div>
+            `;
+
+            // 2. Tampilkan Timeline riwayat perjalanan
+            timeline.style.display = 'block';
+            let listPerjalanan = "<h3 style='text-align:left; color:#333; margin-bottom:20px;'>Riwayat Perjalanan</h3>";
+            data.perjalanan.forEach(p => {
+                listPerjalanan += `
+                    <div class="step">
+                        <span class="waktu">${p.waktu}</span><br>
+                        <span style="color:#444;">${p.keterangan}</span>
+                    </div>
+                `;
+            });
+            timeline.innerHTML = listPerjalanan;
+        } else {
+            // Jika nomor DO tidak ditemukan
+            error.style.display = 'block';
+        }
+    }
+
+    // Fitur tambahan: Tekan 'Enter' untuk melacak
+    document.getElementById('doInput').addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            lacakSekarang();
+        }
+    });
+</script>
+
+</body>
+</html>
