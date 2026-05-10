@@ -1,4 +1,4 @@
-// data para user untuk melakukan login
+// daftar data para user untuk melakukan login
 var dataPengguna = [
   {
     id: 1,
